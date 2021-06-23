@@ -2,7 +2,7 @@
 
 const logger = require("../utils/logger");
 const axios = require("axios");
-const oneCallRequest = `https://api.openweathermap.org/data/2.5/onecall?lat=52.160858&lon=-7.152420&units=metric&appid=YOUR_API_KEY_HERE`
+
 const dashboard = {
   index(request, response) {
     logger.info("dashboard rendering");
@@ -14,7 +14,10 @@ const dashboard = {
   async addreport(request, response) {
     logger.info("rendering new report");
     let report = {};
-    const result = await axios.get(oneCallRequest);
+    const lat = request.body.lat;
+    const lng = request.body.lng;
+    const requestUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&appid=YOUR_API_KEY_HERE`
+    const result = await axios.get(requestUrl);
     if (result.status == 200) {
       const reading = result.data.current;
       report.code = reading.weather[0].id;
